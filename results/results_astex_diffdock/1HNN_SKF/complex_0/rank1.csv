@@ -1,0 +1,28 @@
+Long summary for results_astex/1HNN_SKF/complex_0/rank1.sdf 1HNN_SKF_A_3001
+MOL_PRED loaded                          .   
+MOL_TRUE loaded                          .   
+MOL_COND loaded                          .   
+Sanitization                             .   
+InChI convertible                        .   
+All atoms connected                      .   
+Molecular formula                        .   
+Molecular bonds                          .   
+Double bond stereochemistry              .   
+Tetrahedral chirality                    .   
+Bond lengths                             .   
+Bond angles                              .   
+Internal steric clash                    .   
+Aromatic ring flatness                   .   
+Non-aromatic ring non-flatness           .   
+Double bond flatness                     .   
+Internal energy                          .   
+Protein-ligand maximum distance          .   
+Minimum distance to protein              Fail
+Minimum distance to organic cofactors    .   
+Minimum distance to inorganic cofactors  .   
+Minimum distance to waters               .   
+Volume overlap with protein              .   
+Volume overlap with organic cofactors    .   
+Volume overlap with inorganic cofactors  .   
+Volume overlap with waters               .   
+RMSD ≤ 2Å                                .   
