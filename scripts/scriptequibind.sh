@@ -2,14 +2,17 @@
 
 # Configuración de archivos y rutas
 
-cd EquiBind
+cd $HOME/tfg/EquiBind
 source ~/miniconda3/etc/profile.d/conda.sh 
 conda activate equibind || { echo "ERROR: No se activó el entorno 'equibind'."; exit 1; }
 
 CONFIG="./configs_clean/inference.yml"
 
-INPUT_DIR="../astex_diverse_set"
-OUT_DIR="results_astex"
+ #INPUT_DIR="../data_sets/astex_diverse_set"
+#OUT_DIR="../results/results_astex_equibind"
+
+INPUT_DIR="$HOME/docking/data_sets/posebusters_benchmark_set"
+OUT_DIR="$HOME/docking/results/results_posebusters_benchmark_set"
 
 
 OUT_FORMAT="csv"
@@ -39,7 +42,7 @@ echo "Procesando resultados con bust..."
 
     PROTEIN="${INPUT_DIR}/${BASE}/${BASE}_protein.pdb"
     LIGAND="${INPUT_DIR}/${BASE}/${BASE}_ligand.sdf"
-    SDF="results_astex${OUTPUT_DIR}/${BASE}/lig_equibind_corrected.sdf"
+    SDF="${OUT_DIR}/${BASE}/lig_equibind_corrected.sdf"
 
     bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt ""$OUT_FORMAT  | awk -v protein="$BASE" 'NR>1 {print protein "," $0}'>> $OUT_DIR/resultsBust.csv
 done
