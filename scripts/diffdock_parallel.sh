@@ -11,17 +11,23 @@ conda activate diffdock || { echo "ERROR: No se activó el entorno 'diffdock'.";
 
 python -c "import esm; print(esm.__file__)"
 
- #ASTEX="../astex_diverse_set/astex.txt"
-DIR="$HOME/docking/data_sets/posebusters_benchmark_set"
-ASTEX="$DIR.posebusters.txt"
-ls -d $DIR/*/ | xargs -n 1 basename > $ASTEX
+SET="posebusters_benchmark_set"  
+ #"astex_diverse_set"
+RESULT_NAME="results_posebusters_diffdock"
+
+
+#ASTEX="../astex_diverse_set/astex.txt"
+
+DIR="$HOME/docking/data_sets/$SET"
+ASTEX="$DIR.$SET.txt"
+#ls -d $DIR/*/ | xargs -n 1 basename > $ASTEX
 
 
 
 CONFIG="default_inference_args.yaml"
-OUT_CSV_ALL="$HOME/docking/results/results_posebusters_diffdock/evaluation.csv"
+OUT_CSV_ALL="$HOME/docking/results/$RESULT_NAME/evaluation.csv"
 
-mkdir -p $HOME/docking/results/results_posebusters_diffdock/temp
+mkdir -p $HOME/docking/results/$RESULT_NAME/temp
 
 
 procesar_proteina() {
@@ -33,12 +39,11 @@ echo "Protein $BASE"
 #PROTEIN="../astex_diverse_set/${BASE}/${BASE}_protein.pdb"
 #LIGAND="../astex_diverse_set/${BASE}/${BASE}_ligand.sdf"
 
-PROTEIN="$HOME/docking/data_sets/posebusters_benchmark_set/${BASE}/${BASE}_protein.pdb"
-LIGAND="$HOME/docking/data_sets/posebusters_benchmark_set/${BASE}/${BASE}_ligand.sdf"
+PROTEIN="$DIR/${BASE}/${BASE}_protein.pdb"
+LIGAND="$DIR/${BASE}/${BASE}_ligand.sdf"
 
-OUT_DIR="$HOME/docking/results/results_posebusters_diffdock/$BASE"
+OUT_DIR="$HOME/docking/results/$RESULT_NAME/$BASE"
 SDF="$OUT_DIR"/complex_0/rank1.sdf
-
 OUT_FORMAT="csv"
 
 
@@ -65,18 +70,18 @@ echo "Procesando resultados con bust..."
 
 
 if [ -f "$SDF" ]; then
-    bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt "$OUT_FORMAT" | awk -v protein="$BASE" 'NR>1 {print protein "," $0}' > "$HOME/docking/results/results_posebusters_diffdock/temp/${BASE}.csv"
+    bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt "$OUT_FORMAT" | awk -v protein="$BASE" 'NR>1 {print protein "," $0}' > "$HOME/docking/results/$RESULT_NAME/temp/${BASE}.csv"
 fi
 
 }
 
 export -f procesar_proteina
-export CONFIG OUT_CSV_ALL
+export CONFIG OUT_CSV_ALL RESULT_NAME DIR
 cat "$ASTEX" | xargs -I {} -P $NUM_PROCESOS bash -c 'procesar_proteina "$@"' _ {}
 
 echo "Concatenando resultados..."
-cat "$HOME/docking/results/results_posebusters_diffdock/temp"/*.csv >> $OUT_CSV_ALL
-rm -rf "$HOME/docking/results/results_posebusters_diffdock/temp"
+cat "$HOME/docking/results/$RESULT_NAME/temp"/*.csv >> $OUT_CSV_ALL
+rm -rf "$HOME/docking/results/$RESULT_NAME/temp"
 
 rm $ASTEX
 
