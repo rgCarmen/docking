@@ -5,8 +5,8 @@
 # Configuración de archivos y rutas
 
 
-INPUT_DIR="data_sets/astex_diverse_set"
-OUT_DIR="results"
+INPUT_DIR="../data_sets/astex_diverse_set"
+OUT_DIR="../results"
 
 
 OUT_FORMAT="csv"

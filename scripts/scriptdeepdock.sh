@@ -1,5 +1,6 @@
 #!/bin/bash
- #  docker run -it -p 8888:8888 -v ~/docking/data_sets/astex_diverse_set:/astex_diverse_set -v ~/docking/scripts/docking.py -v ~/docking/scripts/scriptdeepdock.sh omendezlucio/deepdock:latest  cd DeepDock ./scriptdeepdock.sh
+ # docker run -it -p 8888:8888 -v ~/docking/data_sets/astex_diverse_set:/astex_diverse_set -v ~/docking/scripts/docking.py:/DeepDock/docking.py -v ~/docking/scripts/scriptdeepdock.sh:/DeepDock/scriptdeepdock.sh o
+#mendezlucio/deepdock:latest  cd DeepDock ./scriptdeepdock.sh
 INPUT_DIR="../astex_diverse_set"
 
 echo $INPUT_DIR
@@ -19,14 +20,14 @@ for P in "$INPUT_DIR"/*/; do
     if [ -f "$SDF" ]; then
         echo "Docking ya existe"
     else
-        if [[ "$BASE">"1Q1G_MTI" ]]; then
+        #if [[ "$BASE" == "1GPK_HUP" ]]; then
             #echo "yes"
             python docking.py $BASE
         #remove created files
             rm $BASE*
-        else
-            echo "no"
-        fi
+        #else
+            #echo "no"
+        #fi
     fi
 
     
