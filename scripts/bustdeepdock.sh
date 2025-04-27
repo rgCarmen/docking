@@ -5,9 +5,10 @@
 # Configuración de archivos y rutas
 
 
-INPUT_DIR="../data_sets/astex_diverse_set"
-OUT_DIR="../results"
-
+#INPUT_DIR="../data_sets/astex_diverse_set"
+#OUT_DIR="../results"
+INPUT_DIR="${HOME}/docking/data_sets/astex_diverse_set"
+OUT_DIR="${HOME}/docking/results/results_astex_unimol"
 
 OUT_FORMAT="csv"
 
@@ -21,13 +22,13 @@ echo "Procesando resultados con bust..."
 
     PROTEIN="${INPUT_DIR}/${BASE}/${BASE}_protein.pdb"
     LIGAND="${INPUT_DIR}/${BASE}/${BASE}_ligand.sdf"
-    SDF="${INPUT_DIR}/${BASE}/${BASE}_ligand_opt_deepdock.sdf"
+    SDF="${OUT_DIR}/${BASE}/${BASE}_unimol.sdf"
     
 
     if [ -f "$SDF" ]; then
         echo $BASE
 
-        bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt ""$OUT_FORMAT  | awk -v protein="$BASE" 'NR>1 {print protein "," $0}'>> $OUT_DIR/resultsBustDeepDock.csv
+        bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt ""$OUT_FORMAT  | awk -v protein="$BASE" 'NR>1 {print protein "," $0}'>> $OUT_DIR/resultsBustUniMol.csv
     fi
 done
 
