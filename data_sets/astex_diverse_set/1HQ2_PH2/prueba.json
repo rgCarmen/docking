@@ -1,0 +1,14 @@
+{
+    "name": "1HQ_PH2",
+    "sequences": [
+      {
+        "protein": {
+          "id": "A",
+          "sequence": "TVAYIAIGSNLASPLEQVNAALKALGDIPESHILTVSSFYRTPPLGPQDQPDYLNAAVALETSLAPEELLNHTQRIELQQGAVRKAERWGPRTLDLDIMLFGNEVINTERLTVPHYDMKNRGFMLWPLFEIAPELVFPDGEMLRQILHTRAFDKLNKW"
+        }
+      }
+    ],
+    "modelSeeds": [1],
+    "dialect": "alphafold3",
+    "version": 1
+  }

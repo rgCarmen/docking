@@ -28,7 +28,7 @@ echo "Procesando resultados con bust..."
     if [ -f "$SDF" ]; then
         echo $BASE
 
-        bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt ""$OUT_FORMAT  | awk -v protein="$BASE" 'NR>1 {print protein "," $0}'>> $OUT_DIR/resultsBustUniMol.csv
+        bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt "$OUT_FORMAT"  | awk -v protein="$BASE" 'NR>1 {print protein "," $0}'>> $OUT_DIR/resultsBustUniMol.csv
     fi
 done
 

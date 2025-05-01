@@ -44,7 +44,7 @@ echo "Procesando resultados con bust..."
 OUT_CSV_ALL="evaluation.csv"
 
 if [ -f "$SDF" ]; then
-bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt "$OUT_FORMAT" | awk -v protein="$BASE" 'NR>1 {print protein "|" $0}' >> $OUT_CSV_ALL
+bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt "$OUT_FORMAT" | awk -v protein="$BASE" 'NR>1 {print protein "," $0}' >> $OUT_CSV_ALL
 fi
 
 done < "$ASTEX"
