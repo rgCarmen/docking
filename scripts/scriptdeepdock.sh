@@ -1,8 +1,10 @@
 #!/bin/bash
  # docker run -it -p 8888:8888 -v ~/docking/data_sets/astex_diverse_set:/astex_diverse_set -v ~/docking/scripts/docking.py:/DeepDock/docking.py -v ~/docking/scripts/scriptdeepdock.sh:/DeepDock/scriptdeepdock.sh o
 #mendezlucio/deepdock:latest  cd DeepDock ./scriptdeepdock.sh
-INPUT_DIR="../astex_diverse_set"
 
+# docker run -it -p 8888:8888 -v ~/docking/data_sets/posebusters_benchmark_set:/posebusters_benchmark_set -v ~/docking/scripts/docking.py:/DeepDock/docking.py -v ~/docking/scripts/scriptdeepdock.sh:/DeepDock/scriptdeepdock.sh omendezlucio/deepdock:latest
+#INPUT_DIR="../astex_diverse_set"
+INPUT_DIR="../posebusters_benchmark_set"
 echo $INPUT_DIR
 
 echo "Ejecutando DeepDock..."

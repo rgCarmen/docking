@@ -7,8 +7,8 @@
 
 #INPUT_DIR="../data_sets/astex_diverse_set"
 #OUT_DIR="../results"
-INPUT_DIR="${HOME}/docking/data_sets/astex_diverse_set"
-OUT_DIR="${HOME}/docking/results/results_astex_unimol"
+INPUT_DIR="${HOME}/docking/data_sets/posebusters_benchmark_set"
+OUT_DIR="${HOME}/docking/results/results_posebusters_unimol"
 
 OUT_FORMAT="csv"
 
@@ -19,6 +19,7 @@ echo "Procesando resultados con bust..."
 
     BASE=$(basename "$P")
 
+    if [[ $BASE > "8F4J_PHO" ]]; then
 
     PROTEIN="${INPUT_DIR}/${BASE}/${BASE}_protein.pdb"
     LIGAND="${INPUT_DIR}/${BASE}/${BASE}_ligand.sdf"
@@ -29,6 +30,8 @@ echo "Procesando resultados con bust..."
         echo $BASE
 
         bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt "$OUT_FORMAT"  | awk -v protein="$BASE" 'NR>1 {print protein "," $0}'>> $OUT_DIR/resultsBustUniMol.csv
+    fi
+
     fi
 done
 
