@@ -5,8 +5,8 @@ conda activate unicore || { echo "ERROR: No se activó el entorno 'unicore'."; e
 
 cd $HOME/Uni-Mol/unimol_docking_v2/interface
 
-INPUT_DIR="${HOME}/docking/data_sets/posebusters_benchmark_set"
-OUT_DIR="${HOME}/docking/results/results_posebusters_unimol"
+INPUT_DIR="${HOME}/docking/data_sets/astex_diverse_set"
+OUT_DIR="${HOME}/docking/results/results_astex_start_gridlig_unimol"
 
 
 
@@ -19,7 +19,7 @@ for P in "$INPUT_DIR"/*/; do
     BASE=$(basename "$P")
     echo "Protein" $BASE
 
-    LIGAND="${INPUT_DIR}/${BASE}/${BASE}_ligand.sdf"
+    LIGAND="${INPUT_DIR}/${BASE}/${BASE}_ligand_start_conf.sdf"
     PROTEIN="${INPUT_DIR}/${BASE}/${BASE}_protein.pdb"
     GRID="${INPUT_DIR}/${BASE}/${BASE}.json"
 
@@ -33,7 +33,7 @@ for P in "$INPUT_DIR"/*/; do
 
     #ejecutar unimol
 
-    if [[ ${BASE} > "7P2W_4QR" ]]; then
+    #if [[ ${BASE} > "7P2W_4QR" ]]; then
 
          python demo.py --mode single --conf-size 10 --cluster \
             --input-protein $PROTEIN \
@@ -44,9 +44,9 @@ for P in "$INPUT_DIR"/*/; do
             --steric-clash-fix \
             --model-dir ~/unimol_docking_v2_240517.pt
 
-    else
-        echo "Skipped"
-    fi
+    #else
+       # echo "Skipped"
+    #fi
 done
 
 #probar con batch one2one  -> antes hay que hacer un csv indicando proteina, ligando, grid y out_name

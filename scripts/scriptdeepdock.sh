@@ -22,7 +22,7 @@ for P in "$INPUT_DIR"/*/; do
     if [ -f "$SDF" ]; then
         echo "Docking ya existe"
     else
-        if [[ "$BASE">"1PMN_984" ]]; then
+        if [[ "$BASE">"7Q19_DMS" ]]; then
             #echo "yes"
             python docking.py $BASE
         #remove created files

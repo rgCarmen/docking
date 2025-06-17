@@ -47,8 +47,11 @@ model.load_state_dict(checkpoint['model_state_dict'])
 real_mol = Chem.MolFromMol2File(ligand_filename,sanitize=False, cleanupSubstructures=False)
 
 opt_mol, init_mol, result = dock_compound(real_mol, f"{basename}_protein.ply", model, dist_threshold=3., popsize=150, seed=123, device=device)
-with open(f"../posebusters_benchmark_set/{basename}/{basename}_ligand_opt_deepdock.txt", "w") as f:  
-    f.write(opt_mol)
+
+
+print("Molecule")
+print(opt_mol)
+
 sdf_result = Chem.MolToMolBlock(opt_mol, kekulize=False)  
 with open(f"../posebusters_benchmark_set/{basename}/{basename}_ligand_opt_deepdock.sdf", "w") as f:  
     f.write(sdf_result)

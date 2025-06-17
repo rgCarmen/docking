@@ -9,7 +9,7 @@ conda activate equibind || { echo "ERROR: No se activó el entorno 'equibind'.";
 CONFIG="./configs_clean/inference.yml"
 
 INPUT_DIR="$HOME/docking/data_sets/astex_diverse_set"
-OUT_DIR="$HOME/docking/results/results_astex_equibind"
+OUT_DIR="$HOME/docking/results/results_astex_start_equibind"
 
 #INPUT_DIR="$HOME/docking/data_sets/posebusters_benchmark_set"
 #OUT_DIR="$HOME/docking/results/results_posebusters_benchmark_set"
@@ -27,7 +27,7 @@ sed -i "s|^output_directory: .*|output_directory: $OUT_DIR|" "$CONFIG"
 # Ejecución Equibind
 echo "Ejecutando Equibind..."
 
-#python inference.py --config=$CONFIG
+python inference.py --config=$CONFIG
 
 
 # Evaluar con PoseBuster

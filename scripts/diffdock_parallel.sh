@@ -11,16 +11,16 @@ conda activate diffdock || { echo "ERROR: No se activó el entorno 'diffdock'.";
 
 python -c "import esm; print(esm.__file__)"
 
-SET="posebusters_benchmark_set"  
- #"astex_diverse_set"
-RESULT_NAME="results_posebusters_diffdock"
+SET="astex_diverse_set"  
+ #"astex_diverse_set"/posebusters_benchmark_set
+RESULT_NAME="results_astex_diffdock_start"
 
 
-#ASTEX="../astex_diverse_set/astex.txt"
+ASTEX="../astex_diverse_set/astex.txt"
 
 DIR="$HOME/docking/data_sets/$SET"
-ASTEX="$DIR.$SET.txt"
-#ls -d $DIR/*/ | xargs -n 1 basename > $ASTEX
+#ASTEX="$DIR.$SET.txt"
+ls -d $DIR/*/ | xargs -n 1 basename > $ASTEX
 
 
 
@@ -40,7 +40,8 @@ echo "Protein $BASE"
 #LIGAND="../astex_diverse_set/${BASE}/${BASE}_ligand.sdf"
 
 PROTEIN="$DIR/${BASE}/${BASE}_protein.pdb"
-LIGAND="$DIR/${BASE}/${BASE}_ligand.sdf"
+LIGAND="$DIR/${BASE}/${BASE}_ligand_start_conf.sdf"
+LIGAND_TRUE="$DIR/${BASE}/${BASE}_ligand.sdf"
 
 OUT_DIR="$HOME/docking/results/$RESULT_NAME/$BASE"
 SDF="$OUT_DIR"/complex_0/rank1.sdf
@@ -70,7 +71,7 @@ echo "Procesando resultados con bust..."
 
 
 if [ -f "$SDF" ]; then
-    bust "$SDF" -l "$LIGAND" -p "$PROTEIN" --outfmt "$OUT_FORMAT" | awk -v protein="$BASE" 'NR>1 {print protein "," $0}' > "$HOME/docking/results/$RESULT_NAME/temp/${BASE}.csv"
+    bust "$SDF" -l "$LIGAND_TRUE" -p "$PROTEIN" --outfmt "$OUT_FORMAT" | awk -v protein="$BASE" 'NR>1 {print protein "," $0}' > "$HOME/docking/results/$RESULT_NAME/temp/${BASE}.csv"
 fi
 
 }
