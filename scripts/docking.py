@@ -8,26 +8,29 @@ from deepdock.DockingFunction import dock_compound, get_random_conformation
 import numpy as np
 import torch
 import subprocess
-# set the random seeds for reproducibility
-#obabel input.sdf -O output.mol2 -h (hidrógenos implícitos)
 
+
+# Argumentos
 parser = argparse.ArgumentParser(description="DeepDock docking automation script.")
-parser.add_argument("basename", type=str, help="Basename of the protein/ligand (e.g., {basename})")
+parser.add_argument("basename", type=str, help="Basename of the complex")
+parser.add_argument("setname", type=str, help="Name of the dataset")
 args = parser.parse_args()
 
+# Copiar los ficheros necesarios en el directorio actual
 basename = args.basename
+setname=args.setname
 protein_filename =f"{basename}_protein.pdb"
-ligand_filename = f"{basename}_ligand.mol2"
+ligand_filename = f"{basename}_ligand_start_conf.mol2"
 
-copy_pdb = ['cp', f'../posebusters_benchmark_set/{basename}/{protein_filename}', '.']
-copy_mol2 = ['cp', f'../posebusters_benchmark_set/{basename}/{ligand_filename}', '.']
+copy_pdb = ['cp', f'../{setname}/{basename}/{protein_filename}', '.']
+copy_mol2 = ['cp', f'../{setname}/{basename}/{ligand_filename}', '.']
 subprocess.run(copy_pdb)
 subprocess.run(copy_mol2)
 
 np.random.seed(123)
 torch.cuda.manual_seed_all(123)
 
-# Crear mesh (pymesh) .ply
+# Crear mesh 
 compute_inp_surface(protein_filename, ligand_filename, dist_threshold=10)
 
 # Cargar modelo
@@ -42,16 +45,13 @@ model.load_state_dict(checkpoint['model_state_dict'])
 
 
 
-# Dock
+# Docking 
 
 real_mol = Chem.MolFromMol2File(ligand_filename,sanitize=False, cleanupSubstructures=False)
-
 opt_mol, init_mol, result = dock_compound(real_mol, f"{basename}_protein.ply", model, dist_threshold=3., popsize=150, seed=123, device=device)
 
 
-print("Molecule")
-print(opt_mol)
-
+# Guardar opt_mol en formato sdf
 sdf_result = Chem.MolToMolBlock(opt_mol, kekulize=False)  
-with open(f"../posebusters_benchmark_set/{basename}/{basename}_ligand_opt_deepdock.sdf", "w") as f:  
+with open(f"../{setname}/{basename}/{basename}_ligand_opt_start_deepdock.sdf", "w") as f:  
     f.write(sdf_result)

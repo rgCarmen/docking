@@ -1,23 +1,25 @@
 #!/bin/bash
 
+UNIMOL= "../Uni-Mol"
+SET="posebusters_benchmark_set"
+INPUT_DIR="${HOME}/docking/data_sets/${SET}"
+OUT_DIR="${HOME}/docking/results/results_pb_start_gridlig_unimol"
+
+
+# Activar el entorno
 source ~/miniconda3/etc/profile.d/conda.sh 
 conda activate unicore || { echo "ERROR: No se activó el entorno 'unicore'."; exit 1; }
 
-cd $HOME/Uni-Mol/unimol_docking_v2/interface
-
-INPUT_DIR="${HOME}/docking/data_sets/astex_diverse_set"
-OUT_DIR="${HOME}/docking/results/results_astex_start_gridlig_unimol"
+cd $UNIMOL/unimol_docking_v2/interface
 
 
-
-echo $INPUT_DIR
 
 echo "Ejecutando UniMol..."
 pwd
 for P in "$INPUT_DIR"/*/; do
 
     BASE=$(basename "$P")
-    echo "Protein" $BASE
+    echo "Complex $BASE
 
     LIGAND="${INPUT_DIR}/${BASE}/${BASE}_ligand_start_conf.sdf"
     PROTEIN="${INPUT_DIR}/${BASE}/${BASE}_protein.pdb"
@@ -31,11 +33,9 @@ for P in "$INPUT_DIR"/*/; do
     fi
    
 
-    #ejecutar unimol
+    #Ejcutar UNIMOL 
 
-    #if [[ ${BASE} > "7P2W_4QR" ]]; then
-
-         python demo.py --mode single --conf-size 10 --cluster \
+    python demo.py --mode single --conf-size 10 --cluster \
             --input-protein $PROTEIN \
             --input-ligand $LIGAND \
             --input-docking-grid $GRID \
@@ -44,9 +44,5 @@ for P in "$INPUT_DIR"/*/; do
             --steric-clash-fix \
             --model-dir ~/unimol_docking_v2_240517.pt
 
-    #else
-       # echo "Skipped"
-    #fi
+  
 done
-
-#probar con batch one2one  -> antes hay que hacer un csv indicando proteina, ligando, grid y out_name
