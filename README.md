@@ -37,7 +37,6 @@ scripts/
   - **EquiBind**: *scriptequibind.sh*
   - **DeepDock**: *scriptdeepdock.sh*, *docking.py*, *bustdeepdock.sh*
   - **UniMol**: *scriptunimol.sh*, *unimol_grid.py*
-  PoseBusters.
 
 
 ## Requisitos
