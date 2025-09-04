@@ -37,10 +37,15 @@ scripts/
   - **EquiBind**: *scriptequibind.sh*
   - **DeepDock**: *scriptdeepdock.sh*, *docking.py*, *bustdeepdock.sh*
   - **UniMol**: *scriptunimol.sh*, *unimol_grid.py*
+ 
 
+## Herramientas empleadas y Requisitos
 
-## Requisitos
-
+- [EquiBind](https://github.com/HannesStark/EquiBind) (acceso: 9 de junio de 2025)  
+- [DiffDock](https://github.com/gcorso/DiffDock) (acceso: 15 de abril de 2025)  
+- [DeepDock](https://github.com/OptiMaL-PSE-Lab/DeepDock) (acceso: 30 de marzo de 2025)  
+- [Uni-Mol Docking V2](https://github.com/deepmodeling/Uni-Mol/tree/main/unimol_docking_v2) (acceso: 27 de abril de 2025)  
+---
 - Python (con RDKit, PyTorch, y dependencias de cada método)
 - Conda (para los entornos de DeepDock, DiffDock, EquiBind, UniMol)
 - Repositorios de las herramientas
