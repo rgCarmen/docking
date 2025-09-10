@@ -33,10 +33,70 @@ scripts/
   - Cada subcarpeta corresponde a un método y/o conjunto de datos específico 
   - Dentro de cada subcarpeta hay directorios por complejo con elarchivos SDF resultante.
 - **scripts/**: Scripts para ejecutar las diferentes herramientas de docking y procesar los resultados.
-  - **DiffDock**: *diffdock_parallel.sh*
-  - **EquiBind**: *scriptequibind.sh*
-  - **DeepDock**: *scriptdeepdock.sh*, *docking.py*, *bustdeepdock.sh*
-  - **UniMol**: *scriptunimol.sh*, *unimol_grid.py*
+
+  #### DiffDock
+  - *diffdock_parallel.sh*
+    Script para ejecutar DiffDock sobre un conjunto de complejos proteína-ligando y obtener la evaluación de los resultados mediante PoseBusters.
+    ```bash
+    ./diffdock_parallel.sh <num_procesos>
+    ```
+    ❗Se necesita el repositorio de la herramienta  [DiffDock](https://github.com/gcorso/DiffDock) y el entorno conda diffdock para la ejecución.
+
+  #### EquiBind
+    - *scriptequibind.sh*
+       Script para ejecutar EquiBind sobre un conjunto de complejos proteína-ligando y obtener la evaluación de los resultados mediante PoseBusters.
+    ```bash
+    ./scriptequibind.sh
+    ```
+    ❗Se necesita el repositorio de la herramienta  [EquiBind](https://github.com/HannesStark/EquiBind)  y el entorno conda equibind para la ejecución.
+
+  #### DeepDock
+    - *scriptdeepdock.sh*
+      Script para ejecutar DeepDock sobre un conjunto de complejos proteína-ligando
+    - *docking.py*
+      Script auxiliar para realizar la inferencia con DeepDock.
+   
+     -*bustdeepdock.sh*
+      Script para obtener la evaluación de los resultados mediante PoseBusters.
+
+   ❗La ejecución se realiza dentro del contenedor oficial `omendezlucio/deepdock:latest`.  Se copian las carpetas y scripts necesarios como volúmenes (`-v`).
+      ```bash
+        #  lanzar el contenedor con volúmenes montados
+        docker run -it \
+        -v ~/docking/data_sets/astex_diverse_set:/astex_diverse_set \
+        -v ~/docking/scripts/docking.py:/DeepDock/docking.py \
+        -v ~/docking/scripts/scriptdeepdock.sh:/DeepDock/scriptdeepdock.sh \
+        omendezlucio/deepdock:latest
+      ```
+  
+    ```bash
+        # ejecutar DeepDock dentro del contenedor
+        cd DeepDock
+        ./scriptdeepdock.sh
+    ```
+    
+    ```bash
+        #  salir del contenedor (esto también lo detiene)
+        exit
+    ```
+    
+    ```bash
+        # evaluar con PoseBusters (ya en el host)
+        ./bustdeepdock.sh
+    ```
+   
+      
+  #### **UniMol**
+    - *scriptunimol.sh*
+      Script para ejecutar UniMol Docking sobre un conjunto de complejos proteína-ligando.
+    ```bash
+    ./scriptunimol.sh
+    ```
+  
+    - *unimol_grid.py*
+      Script para calcular la malla de docking del complejo. Es llamado por  *scriptunimol.sh*
+      
+     ❗Se necesita el repositorio de la herramienta  [UniMol](https://github.com/deepmodeling/Uni-Mol/tree/main/unimol_docking_v2)  y el entorno conda unicore para la ejecución.
 
 ## Herramientas empleadas y Requisitos
 
