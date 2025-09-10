@@ -18,7 +18,7 @@ OUT_FORMAT="csv"
 # Activar entorno conda
 
 cd DiffDock
-source ~/miniconda3/etc/profile.d/conda.sh # conda init (no funciona ni idea por que)
+source ~/miniconda3/etc/profile.d/conda.sh
 conda activate diffdock || { echo "ERROR: No se activó el entorno 'diffdock'."; exit 1; }
 
 python -c "import esm; print(esm.__file__)"
