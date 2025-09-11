@@ -25,7 +25,7 @@ scripts/
     ...
 ```
 
-### Descripción de carpetas y archivos
+## Descripción de carpetas y archivos
 
 - **analysisResults.ipynb**: Jupiter Notebook para el análisis de los resultados obtenidos de las diferentes herramientas de docking.
 - **data_sets/**: Contiene los conjuntos de datos utilizados.
@@ -34,32 +34,101 @@ scripts/
   - Dentro de cada subcarpeta hay directorios por complejo con elarchivos SDF resultante.
 - **scripts/**: Scripts para ejecutar las diferentes herramientas de docking y procesar los resultados.
 
-  #### DiffDock
+  ### DiffDock
   - *diffdock_parallel.sh*
     Script para ejecutar DiffDock sobre un conjunto de complejos proteína-ligando y obtener la evaluación de los resultados mediante PoseBusters.
-    ```bash
-    ./diffdock_parallel.sh <num_procesos>
-    ```
-    ❗Se necesita el repositorio de la herramienta  [DiffDock](https://github.com/gcorso/DiffDock) y el entorno conda diffdock para la ejecución.
 
-  #### EquiBind
+  **Uso**
+    ```bash
+    ./diffdock_parallel.sh <num_procesos> <ruta_diffdock> <ruta_dataset> <ruta_resultados>
+    ```
+
+    ```
+    # ./diffdock_parallel.sh -h
+    
+    Parámetros:
+      num_procesos     Número de procesos en paralelo a ejecutar.
+      ruta_diffdock    Ruta a la carpeta de instalación de DiffDock.
+      ruta_dataset     Ruta al dataset con proteínas y ligandos.
+      ruta_resultados  Carpeta donde se guardarán los resultados.
+
+    Ejemplo:
+      ./diffdock_parallel.sh 4 ~/DiffDock ~/docking/data_sets/posebusters_benchmark_set ~/docking/results/results_posebuster_diffdock_start
+    ```
+    
+    ❗**Requisitos:**
+          Repositorio de la herramienta  [DiffDock](https://github.com/gcorso/DiffDock) y
+          Entorno conda *diffdock* para la ejecución (se activa dentro del script).
+
+  ### EquiBind
     - *scriptequibind.sh*
        Script para ejecutar EquiBind sobre un conjunto de complejos proteína-ligando y obtener la evaluación de los resultados mediante PoseBusters.
-    ```bash
-    ./scriptequibind.sh
-    ```
-    ❗Se necesita el repositorio de la herramienta  [EquiBind](https://github.com/HannesStark/EquiBind)  y el entorno conda equibind para la ejecución.
 
-  #### DeepDock
+  **Uso**
+    ```bash
+    ./scriptequibind.sh <ruta_equibind> <ruta_dataset> <ruta_resultados>
+    ```
+
+    ```
+    # ./scriptequibind.sh -h
+    Parámetros:
+      ruta_equibind    Ruta al repositorio de EquiBind.
+      ruta_dataset     Ruta al dataset con proteínas y ligandos.
+      ruta_resultados  Carpeta donde se guardarán los resultados.
+
+
+    Ejemplo:
+      ./scriptequibind.sh $HOME/EquiBind $HOME/docking/data_sets/posebusters_benchmark_set $HOME/docking/results/results_posebusters_equibind
+    ```
+    
+    ❗**Requisitos:**
+          Repositorio de la herramienta  [EquiBind](https://github.com/HannesStark/EquiBind) y
+          Entorno conda equibind para la ejecución.
+
+  ### DeepDock
     - *scriptdeepdock.sh*
       Script para ejecutar DeepDock sobre un conjunto de complejos proteína-ligando
+
+      **Uso**
+      
+      ```bash
+      ./scriptdeepdock.sh <set> <input_dir>
+      ```
+
+      ```bash
+      # ./scriptdeepdock.sh -h
+        Parámetros:
+          set         Nombre del conjunto de docking (por ejemplo, posebusters_benchmark_set).
+          input_dir   Ruta al directorio donde están las carpetas de los complejos.
+
+        Ejemplo:
+          ./scriptdeepdock.sh posebusters_benchmark_set ../posebusters_benchmark_set
+      ```
     - *docking.py*
       Script auxiliar para realizar la inferencia con DeepDock.
    
-     -*bustdeepdock.sh*
+     - *bustdeepdock.sh*
       Script para obtener la evaluación de los resultados mediante PoseBusters.
+  
+    **Uso**
+  
+          ```bash
+              ./bustdeepdock.sh <input_dir> <out_dir>
+          ```
+
+          ```bash
+              # ./bustdeepdock.sh -h
+              Parámetros:
+                  input_dir   Ruta al directorio donde están las carpetas de los complejos.
+                  out_dir     Carpeta donde se guardarán los resultados.
+
+              Ejemplo:
+                  ./bustdeepdock.sh $HOME/docking/data_sets/posebusters_benchmark_set $HOME/docking/results
+          ```
 
    ❗La ejecución se realiza dentro del contenedor oficial `omendezlucio/deepdock:latest`.  Se copian las carpetas y scripts necesarios como volúmenes (`-v`).
+
+  
       ```bash
         #  lanzar el contenedor con volúmenes montados
         docker run -it \
@@ -72,7 +141,7 @@ scripts/
     ```bash
         # ejecutar DeepDock dentro del contenedor
         cd DeepDock
-        ./scriptdeepdock.sh
+        ./scriptdeepdock.sh astex_diverse_set ../astex_diverse_set
     ```
     
     ```bash
@@ -82,21 +151,36 @@ scripts/
     
     ```bash
         # evaluar con PoseBusters (ya en el host)
-        ./bustdeepdock.sh
+        ./bustdeepdock.sh ../astex_diverse_set results/result_astex_diverse_set
     ```
    
       
-  #### **UniMol**
+  ### **UniMol**
     - *scriptunimol.sh*
       Script para ejecutar UniMol Docking sobre un conjunto de complejos proteína-ligando.
+
+      **Uso**
     ```bash
-    ./scriptunimol.sh
+    ./scriptunimol.sh <ruta_unimol> <ruta_dataset> <ruta_resultados> <ruta_script_grid>
+    ```
+    
+    ```
+    Parámetros:
+      ruta_unimol      Ruta al repositorio de UniMol.
+      ruta_dataset     Ruta al dataset con proteínas y ligandos.
+      ruta_resultados  Carpeta donde se guardarán los resultados.
+      ruta_script_grid Ruta al script unimol_grid.py.
+
+    Ejemplo:
+      ./scriptunimol.sh $HOME/Uni-Mol $HOME/docking/data_sets/posebusters_benchmark_set $HOME/docking/results/results_pb_start_gridlig_unimol docking/scripts/unimol_grid.py
     ```
   
     - *unimol_grid.py*
       Script para calcular la malla de docking del complejo. Es llamado por  *scriptunimol.sh*
       
-     ❗Se necesita el repositorio de la herramienta  [UniMol](https://github.com/deepmodeling/Uni-Mol/tree/main/unimol_docking_v2)  y el entorno conda unicore para la ejecución.
+     ❗**Requisitos:**
+                  Repositorio de la herramienta  [UniMol](https://github.com/deepmodeling/Uni-Mol/tree/main/unimol_docking_v2) y
+                  Entorno conda unicore para la ejecución.
 
 ## Herramientas empleadas y Requisitos
 
