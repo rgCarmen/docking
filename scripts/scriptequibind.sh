@@ -1,16 +1,48 @@
 #!/bin/bash
 
+help() {
+    echo "Uso: $0 <ruta_equibind> <ruta_dataset> <ruta_resultados>"
+    echo
+    echo "Parámetros:"
+    echo "  ruta_equibind    Ruta al repositorio de EquiBind."
+    echo "  ruta_dataset     Ruta al dataset con proteínas y ligandos."
+    echo "  ruta_resultados  Carpeta donde se guardarán los resultados."
+    echo
+    echo "Ejemplo:"
+    echo "  $0 \$HOME/EquiBind \$HOME/docking/data_sets/posebusters_benchmark_set \$HOME/docking/results/results_posebusters_equibind"
+    exit 0
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    help
+fi
+
+if [ $# -lt 3 ]; then
+    echo "ERROR: Faltan argumentos. Usa --help para más información."
+    exit 1
+fi
+
 # Configuración de rutas
 
-EQUIBIND= $HOME/EquiBind
+EQUIBIND=$1 
 CONFIG="./configs_clean/inference.yml"
 
-SET="posebusters_benchmark_set"
-INPUT_DIR="$HOME/docking/data_sets/$SET"
-OUT_DIR="$HOME/docking/results/results_posebusters_equibind"
+
+INPUT_DIR=$2  
+OUT_DIR=$3 
 
 OUT_FORMAT="csv"
-INPUT_DIR_TEMP="$HOME/docking/$SET"
+INPUT_DIR_TEMP="$INPUT_DIR/temp_equibind"
+
+if [ ! -d "$EQUIBIND" ]; then
+    echo "ERROR: la ruta de EquiBind no existe -> $EQUIBIND"
+    exit 1
+fi
+
+if [ ! -d "$INPUT_DIR" ]; then
+    echo "ERROR: la ruta del dataset no existe -> $INPUT_DIR"
+    exit 1
+fi
 
 ##############################################################################################################3
 
@@ -32,12 +64,12 @@ for P in "$INPUT_DIR"/*/; do
    
     PROTEIN="$P/${BASE}_protein.pdb"
 
-    cp "$LIGANDO" "$INPUT_DIR_TEMP/$BASE/${BASE}_ligand.sdf"
+    cp "$LIGAND" "$INPUT_DIR_TEMP/$BASE/${BASE}_ligand.sdf"
     cp "$PROTEIN" "$INPUT_DIR_TEMP/$BASE/"
 done
 
 
-# MODIFIDCAR inference.yml (para establecer el directorio de entrada y salida)
+# MODIFIDCAR inference.yml (para establecer el directorio de entrada y salida) !!Se encuentra en la ruta de EquiBind!!
 
 sed -i "s|^inference_path: .*|inference_path: $INPUT_DIR_TEMP|" "$CONFIG"
 sed -i "s|^output_directory: .*|output_directory: $OUT_DIR|" "$CONFIG"

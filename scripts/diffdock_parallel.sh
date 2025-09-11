@@ -1,17 +1,51 @@
 #!/bin/bash
 
+help() {
+    echo "Uso: $0 <num_procesos> <ruta_diffdock> <ruta_dataset> <ruta_resultados> [set]"
+    echo
+    echo "Parámetros:"
+    echo "  num_procesos     Número de procesos en paralelo a ejecutar."
+    echo "  ruta_diffdock    Ruta a la carpeta de instalación de DiffDock."
+    echo "  ruta_dataset     Ruta al dataset con proteínas y ligandos."
+    echo "  ruta_resultados  Carpeta donde se guardarán los resultados."
+    echo
+    echo "Ejemplo:"
+    echo "  $0 4 ~/DiffDock ~/docking/data_sets/posebusters_benchmark_set ~/docking/results/results_posebuster_diffdock_start"
+    exit 0 #terminar ejecución
+}
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    help
+fi
+
+if [ $# -lt 4 ]; then
+    echo "ERROR: Faltan argumentos. Usa --help para más información."
+    exit 1
+fi
+
 NUM_PROCESOS=$1
 
 # Establecer las rutas
-DIFFDOCK="$HOME/DiffDock"
+DIFFDOCK=$2 
+DIR=$3 # dataset 
 
-SET="posebusters_benchmark_set"
-DIR="$HOME/docking/data_sets/$SET"  
-RESULT_NAME="$HOME/docking/results/results_posebuster_diffdock_start"
+# comprobar rutas
+if [ ! -d "$DIFFDOCK" ]; then
+    echo "ERROR: la ruta de DiffDock no existe -> $DIFFDOCK"
+    exit 1
+fi
+
+if [ ! -d "$DIR" ]; then
+    echo "ERROR: la ruta del dataset no existe -> $DIR"
+    exit 1
+fi
+
+RESULT_NAME=$4 
+
 
 
 CONFIG="default_inference_args.yaml"
-OUT_CSV_ALL="$HOME/docking/results/$RESULT_NAME/evaluation.csv"
+OUT_CSV_ALL="$RESULT_NAME/evaluation.csv"
 
 # Activar entorno conda
 cd $DIFFDOCK
@@ -20,11 +54,11 @@ conda activate diffdock || { echo "ERROR: no se activo el entorno'diffdock'."; e
 
 
 
-IDS="$DIR.$SET.txt"
-ls -d $DIR/*/ | xargs -n 1 basename > $ASTEX
+IDS="$DIR/ids.txt"
+ls -d $DIR/*/ | xargs -n 1 basename > $IDS
 
 
-mkdir -p $HOME/docking/results/$RESULT_NAME/temp
+mkdir -p "$RESULT_NAME/temp"
 
 
 procesar_proteina() {
@@ -58,7 +92,7 @@ fi
 
 
 # Procesar resultados con bust
-echo "Process results with bust..."
+echo "Procesando resultados con..."
 
 if [ -f "$SDF" ]; then
     bust "$SDF" -l "$LIGAND_TRUE" -p "$PROTEIN" --outfmt "$OUT_FORMAT" | awk -v protein="$BASE" 'NR>1 {print protein "," $0}' > "$HOME/docking/results/$RESULT_NAME/temp/${BASE}.csv"
